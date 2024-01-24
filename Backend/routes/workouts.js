@@ -6,6 +6,7 @@ const {
     deleteWorkout,
     updateWorkout
 } = require('../controllers/workoutController')
+
 const router = express.Router();
 
 //This is to get all workouts
