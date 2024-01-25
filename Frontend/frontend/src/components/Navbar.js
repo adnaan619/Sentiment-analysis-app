@@ -46,10 +46,13 @@ function Navbar() {
           <Button
             sx={{
               width: "100px",
-              height: "30px",
-              borderRadius: "15px",
+              height: "40px",
+              textTransform: "capitalize",
+              borderRadius: "5px",
+              fontWeight: "600",
               backgroundColor: "#2b35af",
               color: "#ffffff",
+              fontSize: "18px",
               marginRight: "10px",
               "&:hover": {
                 backgroundColor: "#12086F",
@@ -61,15 +64,17 @@ function Navbar() {
           <Button
             sx={{
               width: "100px",
-              height: "30px",
-              borderRadius: "15px",
+              height: "40px",
+              textTransform: "capitalize",
+              borderRadius: "5px",
+              fontWeight: "600",
               backgroundColor: "#2b35af",
               color: "#ffffff",
-              marginLeft: "5x",
+              fontSize: "18px",
+              marginRight: "10px",
               "&:hover": {
                 backgroundColor: "#12086F",
               },
-              marginRight: "20px",
             }}
           >
             Signup
