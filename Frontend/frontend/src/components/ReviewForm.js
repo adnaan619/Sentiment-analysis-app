@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import TextField from "@mui/material/TextField";
 import Button from '@mui/material/Button';
 import { Grid, Container, Typography } from '@mui/material/';
@@ -10,30 +10,6 @@ import FormLabel from "@mui/material/FormLabel";
 
 
 function ReviewTextbox() {
-
-  //states for managing the user inputs result
-  const [review, setReview] = useState("");
-  const [sentiment, setSentiment] = useState("neutral");
-  const [confidence, setConfidence] = useState("");
-  const [feedback, setFeedback] = useState("");
-
-  //Function to handle review sumbission
-  const submitReview = async () => {
-    try {
-      const response = await fetch("", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ review }),
-      });
-      const data = await response.json();
-      setSentiment(data.sentiment);
-      setConfidence(data.confidence.toFixed(2)); //Set to 2 decimal places
-    } catch (error) {
-      console.error('Error', error);
-      //handle error in application
-    }
-  }
-
   return (
     <Container>
       <Grid style={{ display: "flex", flexDirection: "row" }}>
@@ -42,8 +18,6 @@ function ReviewTextbox() {
           multiline
           autoFocus
           rows={7}
-          value={review}
-          onChange={(e) => setReview(e.target.value)}  //update state on change
           style={{
             height: "193px",
             width: "600px",
@@ -53,7 +27,6 @@ function ReviewTextbox() {
           }}
         />
         <Button
-          onClick={submitReview}  //Add onClick event to handle submission
           sx={{
             color: "#ffffff",
             backgroundColor: "#4adede",
@@ -130,7 +103,6 @@ function ReviewTextbox() {
             Confidence Score
           </Typography>
           <TextField
-            value={confidence} //Display confidence score
             multiline
             autoFocus
             style={{
@@ -159,7 +131,6 @@ function ReviewTextbox() {
               backgroundColor: "#ffffff",
               fontFamily: "Poppins",
             }}
-            onChange={(e) => setFeedback(e.target.value)}  //Update state on change
           />
         </Grid>
       </Grid>
