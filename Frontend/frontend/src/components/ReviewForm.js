@@ -11,7 +11,7 @@ import FormLabel from "@mui/material/FormLabel";
 
 function ReviewTextbox() {
 
-  //states for managing the user inputs results
+  //states for managing the user inputs result
   const [review, setReview] = useState("");
   const [sentiment, setSentiment] = useState("neutral");
   const [confidence, setConfidence] = useState("");
