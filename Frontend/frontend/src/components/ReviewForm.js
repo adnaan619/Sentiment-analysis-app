@@ -20,7 +20,7 @@ function ReviewTextbox() {
   //Function to handle review submission
   const submitReview = async () => {
     try {
-      const response = await fetch('', {
+      const response = await fetch('http://localhost:4000/api/sentiment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ review }),
@@ -95,7 +95,7 @@ function ReviewTextbox() {
             >
               Sentiment Polarity
             </Typography>
-            <RadioGroup defaultValue="neutral" name="radio-buttons-group">
+            <RadioGroup value={sentiment} defaultValue="neutral" name="radio-buttons-group">
               <FormControlLabel
                 style={{ color: "#ffffff" }}
                 value="positive"
