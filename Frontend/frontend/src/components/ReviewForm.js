@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import TextField from "@mui/material/TextField";
 import Button from '@mui/material/Button';
 import { Grid, Container, Typography } from '@mui/material/';
@@ -10,6 +10,30 @@ import FormLabel from "@mui/material/FormLabel";
 
 
 function ReviewTextbox() {
+
+  //Create state to manage the user inputs
+  const [review, setReview] = useState("");
+  const [sentiment, setSentiment] = useState("neutral");
+  const [confidence, setConfidence] = useState("");
+  const [feedback, setFeedback] = useState("");
+
+  //Function to handle review submission
+  const submitReview = async () => {
+    try {
+      const response = await fetch('http://localhost:4000/api/sentiment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ review }),
+      });
+      const data = await response.json();
+      setSentiment(data.sentiment);
+      setConfidence(data.confidence.toFixed(2));   //Decimal place adjusted to 2
+    } catch (error) {
+      console.error('Error', error);
+      //Handle the error appropriately in the application
+    }
+  };
+
   return (
     <Container>
       <Grid style={{ display: "flex", flexDirection: "row" }}>
@@ -18,6 +42,8 @@ function ReviewTextbox() {
           multiline
           autoFocus
           rows={7}
+          value={review}
+          onChange={(e) => setReview(e.target.value)} //update the state on change
           style={{
             height: "193px",
             width: "600px",
@@ -27,6 +53,7 @@ function ReviewTextbox() {
           }}
         />
         <Button
+          onClick={submitReview} // Add onClick event to handle submission
           sx={{
             color: "#ffffff",
             backgroundColor: "#4adede",
@@ -68,7 +95,7 @@ function ReviewTextbox() {
             >
               Sentiment Polarity
             </Typography>
-            <RadioGroup defaultValue="neutral" name="radio-buttons-group">
+            <RadioGroup value={sentiment} defaultValue="neutral" name="radio-buttons-group">
               <FormControlLabel
                 style={{ color: "#ffffff" }}
                 value="positive"
@@ -90,14 +117,13 @@ function ReviewTextbox() {
             </RadioGroup>
           </FormControl>
         </Grid>
-        <Grid >
+        <Grid>
           <Typography
             variant="h5"
             style={{
               color: "#ffffff",
               fontFamily: "Poppins",
-              marginLeft: '90px',
-              
+              marginLeft: "90px",
             }}
           >
             Confidence Score
@@ -114,6 +140,7 @@ function ReviewTextbox() {
               backgroundColor: "#ffffff",
               fontFamily: "Poppins",
             }}
+            value={confidence} // Display confidence score
           />
         </Grid>
         <Grid>
@@ -131,6 +158,8 @@ function ReviewTextbox() {
               backgroundColor: "#ffffff",
               fontFamily: "Poppins",
             }}
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)} // Update state on change
           />
         </Grid>
       </Grid>
