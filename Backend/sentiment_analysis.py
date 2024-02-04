@@ -6,8 +6,8 @@ import os
 print(os.getcwd())
 
 #Load from both files
-vectorizer = joblib.load('tfidf_vectorizer.joblib')
-model = joblib.load('final_svc_model.joblib')
+vectorizer = joblib.load('tfidf_vectorizer1.joblib')
+model = joblib.load('final_svc_model1.joblib')
 
 def predict_sentiment(review):
     #Vectorize the incoming review

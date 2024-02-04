@@ -10,9 +10,15 @@ const app = express();
 // middleware
 app.use(express.json());
 
+const bodyParser = require('body-parser');
+
+//Configured to parse JSON bodies
+app.use(bodyParser.json());
+
+// Custom middleware that logs the request method and URL
 app.use((req, res, next) => {
-  console.log(req.path, req.method);
-  next();
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  next(); // Important to proceed to the next middleware/route handler
 });
 
 // routes for sentiment analysis
