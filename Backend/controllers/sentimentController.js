@@ -1,40 +1,18 @@
-//Import Python shell
-const { PythonShell } = require('python-shell');
-const { default: UserFeedback } = require('../../Frontend/frontend/src/components/UserFeedback');
+const axios = require('axios');
 
-//Analyze sentiment
-const analyzeSentiment = async (req, res) => {
+const analyzeSentiment = (req, res) => {
   const { review } = req.body;
 
-  let options = {
-    mode: 'text',
-    pythonOptions: ['-u'], //get the print results in real time
-    scriptPath: '',
-    args: [review]
-  };
-
-  PythonShell.run('sentiment-analysis.py', options, function (err, results) {
-    if (err) throw err;
-    //results is an array consisting of messages collected during execution
-    console.log('results: &j', results);
-    res.json(JSON.parse(results))
-  })
-
-  try {
-    
-    const sentimentResult = await Sentiment.create({
-      reviewText: review,
-      sentiment: result.sentiment,
-      confidenceScore: result.confidence,
-      userFeedback: '' //Initially stays empty 
-    }); 
-
-    res.status(200).json(sentimentResult);
-  } catch (err) {
-    res.status(400).json({error: err.message})
-  }
-}
+  axios.post('http://localhost:5000/predict', { review })
+    .then(response => {
+      res.status(200).json(response.data);
+    })
+    .catch(error => {
+      console.error("Error when calling Flask service: ", error);
+      res.status(500).json({ error: "Error running sentiment analysis" });
+    });
+};
 
 module.exports = {
-  analyzeSentiment
-};
+  analyzeSentiment,
+}
