@@ -1,12 +1,13 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import App from "./App";
+import store from "./redux/store";
 import './index.css';
-import App from './App';
-import { WorkoutsContextProvider } from './context/WorkoutsContext';
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById("root"));
 root.render(
-  <WorkoutsContextProvider>
+  <Provider store={store}>
     <App />
-  </WorkoutsContextProvider>
+  </Provider>
 );

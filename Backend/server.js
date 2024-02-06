@@ -3,6 +3,8 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const sentimentRoutes = require("./routes/sentimentRoutes");
+const cors = require('cors');
+
 
 // express app
 const app = express();
@@ -11,6 +13,14 @@ const app = express();
 app.use(express.json());
 
 const bodyParser = require('body-parser');
+
+app.use(cors());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 
 //Configured to parse JSON bodies
 app.use(bodyParser.json());

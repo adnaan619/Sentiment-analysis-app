@@ -1,38 +1,19 @@
-import React, {useState} from "react";
-import TextField from "@mui/material/TextField";
-import Button from '@mui/material/Button';
-import { Grid, Container, Typography } from '@mui/material/';
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
+import React, { useState } from "react";
+import { connect } from 'react-redux';
+import { submitReview } from "../redux/actions/submitReviewAction";
+import { Grid, Container, Typography, TextField, Button, Radio, RadioGroup, FormControl, FormControlLabel } from '@mui/material/';
 
 
-function ReviewTextbox() {
+function ReviewForm({sentiment, confidence, submitReview}) {
 
   //Create state to manage the user inputs
-  const [review, setReview] = useState("");
-  const [sentiment, setSentiment] = useState("neutral");
-  const [confidence, setConfidence] = useState("");
+  const [reviewText, setReviewText] = useState("");
   const [feedback, setFeedback] = useState("");
 
-  //Function to handle review submission
-  const submitReview = async () => {
-    try {
-      const response = await fetch('http://localhost:4000/api/sentiment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ review }),
-      });
-      const data = await response.json();
-      setSentiment(data.sentiment);
-      setConfidence(data.confidence.toFixed(2));   //Decimal place adjusted to 2
-    } catch (error) {
-      console.error('Error', error);
-      //Handle the error appropriately in the application
-    }
-  };
+  //Function to handle reviewText submission
+  const handleReviewSubmit = () => {
+    submitReview(reviewText); //Dispatch the action to submit the review
+  }
 
   return (
     <Container>
@@ -42,8 +23,8 @@ function ReviewTextbox() {
           multiline
           autoFocus
           rows={7}
-          value={review}
-          onChange={(e) => setReview(e.target.value)} //update the state on change
+          value={reviewText}
+          onChange={(e) => setReviewText(e.target.value)} //update the state on change
           style={{
             height: "193px",
             width: "600px",
@@ -53,7 +34,7 @@ function ReviewTextbox() {
           }}
         />
         <Button
-          onClick={submitReview} // Add onClick event to handle submission
+          onClick={handleReviewSubmit} // Call the function to handle the submission
           sx={{
             color: "#ffffff",
             backgroundColor: "#4adede",
@@ -64,8 +45,6 @@ function ReviewTextbox() {
             fontWeight: "600",
             fontSize: "18px",
             marginLeft: "35px",
-            // marginTop: "-20px",
-            // marginBottom: "20px",
             fontFamily: "Poppins",
             "&:hover": {
               backgroundColor: "#1aa7ec",
@@ -95,24 +74,28 @@ function ReviewTextbox() {
             >
               Sentiment Polarity
             </Typography>
-            <RadioGroup value={sentiment} defaultValue="neutral" name="radio-buttons-group">
+            <RadioGroup
+              value={sentiment}
+              defaultValue=""
+              name="radio-buttons-group"
+            >
               <FormControlLabel
-                style={{ color: "#ffffff" }}
                 value="positive"
                 control={<Radio />}
                 label="Positive"
+                sx={{ color: "#ffffff" }}
               />
               <FormControlLabel
-                style={{ color: "#ffffff" }}
                 value="negative"
                 control={<Radio />}
                 label="Negative"
+                sx={{ color: "#ffffff" }}
               />
               <FormControlLabel
-                style={{ color: "#ffffff" }}
                 value="neutral"
                 control={<Radio />}
                 label="Neutral"
+                sx={{ color: "#ffffff" }}
               />
             </RadioGroup>
           </FormControl>
@@ -131,6 +114,9 @@ function ReviewTextbox() {
           <TextField
             multiline
             autoFocus
+            InputProps={{
+              readOnly: true,
+            }}
             style={{
               marginTop: "50px",
               marginLeft: "80px",
@@ -143,9 +129,9 @@ function ReviewTextbox() {
             value={confidence} // Display confidence score
           />
         </Grid>
-        <Grid>
+        <Grid style={{display: 'flex', flexDirection: 'row'}}>
           <TextField
-            placeholder="Enter feedback based on review"
+            placeholder="Enter feedback based on reviewText"
             multiline
             autoFocus
             rows={7}
@@ -161,10 +147,42 @@ function ReviewTextbox() {
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)} // Update state on change
           />
+          <Button
+            
+            sx={{
+              color: "#ffffff",
+              backgroundColor: "#4adede",
+              borderRadius: 3,
+              height: "50px",
+              width: "220px",
+              textTransform: "capitalize",
+              fontWeight: "600",
+              fontSize: "18px",
+              marginLeft: "35px",
+              fontFamily: "Poppins",
+              marginTop: '80px',
+              "&:hover": {
+                backgroundColor: "#1aa7ec",
+              },
+            }}
+          >
+            Submit Feedback
+          </Button>
         </Grid>
       </Grid>
     </Container>
   );
 }
 
-export default ReviewTextbox;
+const mapStateToProps = (state) => {
+  console.log("Redux state:", state); // Log the Redux state to see its structure
+  return {
+    sentiment: state.sentimentReducer?.sentiment,
+    confidence: state.sentimentReducer?.confidence,
+  };
+};
+const mapDispatchToProps = {
+  submitReview, //This assumes that the action creator is named submitReview
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReviewForm);
