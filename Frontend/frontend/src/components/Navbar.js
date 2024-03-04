@@ -1,83 +1,99 @@
 import React from "react";
-import { Typography, Container, Grid, Button } from "@mui/material";
+import { Typography, Container, Grid, Button, Box } from "@mui/material";
+// import AccountCircleIcon from "@mui/icons-material/AccountCircle"; // Import for user icon
 
 function Navbar() {
   return (
     <Container
       disableGutters
       maxWidth={false}
-      style={{ display: "flex", backgroundColor: "#4361ee", height: "100px" }}
+      style={{
+        display: "flex",
+        backgroundColor: "#4361ee",
+        height: "80px", // Increased height
+        position: "sticky", // Make header sticky
+        top: 0, // Stick to the top of the page
+        zIndex: 1000, // Ensure it stays on top of other content
+      }}
     >
-      {/* <Link to="/"> */}
       <Grid
         container
-        xs={12}
-        style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+        alignItems="center"
+        justifyContent="center"
+        style={{ height: "100%" }}
       >
         <Grid
-          xs={8}
+          item
+          xs={12}
           style={{
             display: "flex",
-            justifyContent: "flex-start",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Typography
-            variant="h2"
+            variant="h5"
             fontWeight="bold"
             style={{
               color: "#ffffff",
               fontFamily: "Poppins",
-              fontSize: "40px",
-              marginLeft: "120px",
+              marginLeft: "20px", // Adjusted from marginLeft for centering purposes
             }}
           >
             SentimentX
           </Typography>
-        </Grid>
-        {/* </Link> */}
-        <Grid
-          xs={4}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Button
-            sx={{
-              width: "100px",
-              height: "40px",
-              textTransform: "capitalize",
-              borderRadius: "5px",
-              fontWeight: "600",
-              backgroundColor: "#2b35af",
-              color: "#ffffff",
-              fontSize: "18px",
-              marginRight: "10px",
-              "&:hover": {
-                backgroundColor: "#12086F",
-              },
-            }}
-          >
-            login
-          </Button>
-          <Button
-            sx={{
-              width: "100px",
-              height: "40px",
-              textTransform: "capitalize",
-              borderRadius: "5px",
-              fontWeight: "600",
-              backgroundColor: "#2b35af",
-              color: "#ffffff",
-              fontSize: "18px",
-              marginRight: "10px",
-              "&:hover": {
-                backgroundColor: "#12086F",
-              },
-            }}
-          >
-            Signup
-          </Button>
+          <Box display="flex" flexGrow={1} justifyContent="center">
+            {" "}
+            {/* Change for spacing */}
+            <Button
+              style={{
+                color: "#ffffff",
+                textTransform: "none",
+                marginLeft: "0px",
+                marginRight: "200px",
+              }}
+            >
+              Home
+            </Button>
+            <Button
+              style={{
+                color: "#ffffff",
+                textTransform: "none",
+                marginLeft: "100px",
+                marginRight: "100px",
+              }}
+            >
+              Support
+            </Button>
+            <Button
+              style={{
+                color: "#ffffff",
+                textTransform: "none",
+                marginLeft: "190px",
+                marginRight: "20px",
+              }}
+            >
+              Terms & Conditions
+            </Button>
+          </Box>
+          <Box display="flex" alignItems="center">
+            <Button
+              style={{
+                textTransform: "none",
+                backgroundColor: "#000000", // Black background for logout
+                color: "#ffffff",
+                borderRadius: "20px", // Rounded corners
+                marginRight: "20px", // Adjust spacing
+                marginLeft: "20px", // Ensure spacing from nav links
+              }}
+            >
+              Log Out
+            </Button>
+            {/* <AccountCircleIcon
+              style={{ color: "#ffffff", marginLeft: "10px" }}
+            />{" "} */}
+            {/* Adjusted for spacing */}
+          </Box>
         </Grid>
       </Grid>
     </Container>

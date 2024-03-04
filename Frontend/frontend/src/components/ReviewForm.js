@@ -1,10 +1,28 @@
 import React, { useState } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import { submitReview } from "../redux/actions/submitReviewAction";
-import { Grid, Container, Typography, TextField, Button, Radio, RadioGroup, FormControl, FormControlLabel } from '@mui/material/';
+import {
+  Grid,
+  Container,
+  Typography,
+  TextField,
+  Button,
+  FormControl,
+  Radio,
+  RadioGroup,
+  Checkbox,
+  FormControlLabel,
+  Paper,
+  Slider,
+  Box,
+} from "@mui/material/";
+import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt"; // For emotion icons, change as needed
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt"; // For intent icons, change as needed
 
-
-function ReviewForm({sentiment, confidence, submitReview}) {
+function ReviewForm({ sentiment, confidence, submitReview }) {
+  const sliderValueText = (value) => {
+    return `${value}`;
+  };
 
   //Create state to manage the user inputs
   const [reviewText, setReviewText] = useState("");
@@ -13,161 +31,218 @@ function ReviewForm({sentiment, confidence, submitReview}) {
   //Function to handle reviewText submission
   const handleReviewSubmit = () => {
     submitReview(reviewText); //Dispatch the action to submit the review
-  }
+  };
+
+  // State for selected emotions and their scores
+  const [selectedEmotions, setSelectedEmotions] = useState({});
+  const [emotionScores, setEmotionScores] = useState("");
+
+  const handleEmotionChange = (event) => {
+    setSelectedEmotions({
+      ...selectedEmotions,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
+  const emotions = [
+    "disappointment",
+    "sadness",
+    "annoyance",
+    "neutral",
+    "disapproval",
+    "realization",
+    "nervousness",
+    "approval",
+    "joy",
+    "anger",
+    "embarrassment",
+    "caring",
+    "remorse",
+    "disgust",
+    "grief",
+    "confusion",
+    "relief",
+    "desire",
+    "admiration",
+    "optimism",
+    "fear",
+    "love",
+    "excitement",
+    "curiosity",
+    "amusement",
+    "surprise",
+    "gratitude",
+    "pride",
+  ];
+
+  const [selectedIntent, setSelectedIntent] = useState("");
+  const [intentScale, setIntentScale] = useState(30);
+
+  const intents = [
+    { name: "Inquiry/Support", emoji: "🔍" },
+    { name: "Appreciation/Gratitude", emoji: "🙏" },
+    { name: "Cancellation/Return", emoji: "↩️" },
+    { name: "Renewal/Reorder", emoji: "🔄" },
+    { name: "Comparison/Consideration", emoji: "🤔" },
+    { name: "Problem/Issue Reporting", emoji: "⚠️" },
+    { name: "Praise/Endorsement", emoji: "👏" },
+    { name: "Suggestion/Improvement", emoji: "💡" },
+    { name: "Urgency/Immediate Need", emoji: "⏰" },
+    { name: "Engagement/Interaction", emoji: "💬" },
+  ];
+
+  const handleIntentChange = (event) => {
+    setSelectedIntent(event.target.value);
+  };
+
+  const handleScaleChange = (event, newValue) => {
+    setIntentScale(newValue);
+  };
 
   return (
-    <Container>
-      <Grid style={{ display: "flex", flexDirection: "row" }}>
-        <TextField
-          placeholder="Enter review here"
-          multiline
-          autoFocus
-          rows={7}
-          value={reviewText}
-          onChange={(e) => setReviewText(e.target.value)} //update the state on change
-          style={{
-            height: "193px",
-            width: "600px",
-            borderRadius: "10px",
-            backgroundColor: "#ffffff",
-            fontFamily: "Poppins",
-          }}
-        />
-        <Button
-          onClick={handleReviewSubmit} // Call the function to handle the submission
-          sx={{
-            color: "#ffffff",
-            backgroundColor: "#4adede",
-            borderRadius: 3,
-            height: "50px",
-            width: "220px",
-            textTransform: "capitalize",
-            fontWeight: "600",
-            fontSize: "18px",
-            marginLeft: "35px",
-            fontFamily: "Poppins",
-            "&:hover": {
-              backgroundColor: "#1aa7ec",
-            },
-          }}
-        >
-          Submit Review
-        </Button>
+    <Container
+      fullWidth
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        marginTop: "-100px",
+        marginLeft: "-220px",
+      }}
+    >
+      {/* Text Review Entry */}
+      <Grid item xs={12} style={{ marginBottom: "25px" }}>
+        <Paper style={{ padding: "20px" }}>
+          <Typography variant="h6">Text Review Entry</Typography>
+          <TextField
+            fullWidth
+            label="Enter your review"
+            multiline
+            rows={5}
+            placeholder="I recently visited the new Italian restaurant in town..."
+            variant="outlined"
+            margin="normal"
+          />
+          <Button variant="contained" color="primary">
+            Analyze
+          </Button>
+        </Paper>
       </Grid>
       <Grid
-        style={{ display: "flex", flexDirection: "row", marginTop: "50px" }}
+        container
+        style={{ display: "flex", flexDirection: "row" }}
+        spacing={3}
       >
-        <Grid
-          style={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <FormControl>
+        <Grid item xs={12} sm={6}>
+          {" "}
+          {/* Adjust based on your layout needs */}
+          <Paper
+            style={{
+              padding: "20px",
+              height: "350px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
             <Typography
-              variant="h5"
+              variant="h6"
+              style={{ marginBottom: "10px", fontFamily: "Poppins" }}
+            >
+              Emotion Detected
+            </Typography>
+            <Box
               style={{
-                color: "#ffffff",
-                fontFamily: "Poppins",
-                marginBottom: "20px",
+                overflowY: "auto",
+                flexGrow: 1,
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "10px",
+                justifyContent: "space-between",
               }}
             >
-              Sentiment Polarity
+              {emotions.map((emotion, index) => (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={selectedEmotions[emotion] || false}
+                      onChange={handleEmotionChange}
+                      name={emotion}
+                      size="small" // Smaller checkboxes
+                    />
+                  }
+                  label={
+                    <Typography
+                      variant="caption"
+                      style={{ fontSize: "0.75rem", fontFamily: "Poppins" }}
+                    >
+                      {emotion.charAt(0).toUpperCase() + emotion.slice(1)}
+                    </Typography>
+                  }
+                  key={index}
+                  style={{ width: "auto", flexGrow: 1, maxWidth: "30%" }} // Adjust based on your preference
+                />
+              ))}
+            </Box>
+            <TextField
+              fullWidth
+              label="Emotion Scores"
+              multiline
+              rows={2}
+              variant="outlined"
+              margin="dense" // Less space around the TextField
+              style={{ fontFamily: "Poppins" }}
+            />
+          </Paper>
+        </Grid>
+        {/* Intent Detected */}
+        <Grid item xs={12} sm={6}>
+          <Paper
+            style={{
+              padding: "20px",
+              height: "350px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              fontFamily: "Poppins",
+            }}
+          >
+            <Typography style={{ fontFamily: "Poppins" }} variant="h6">
+              Intent Detected
             </Typography>
-            <RadioGroup
-              value={sentiment}
-              defaultValue=""
-              name="radio-buttons-group"
+            <FormControl
+              component="fieldset"
+              style={{ overflowY: "auto", flexGrow: 1 }}
             >
-              <FormControlLabel
-                value="positive"
-                control={<Radio />}
-                label="Positive"
-                sx={{ color: "#ffffff" }}
-              />
-              <FormControlLabel
-                value="negative"
-                control={<Radio />}
-                label="Negative"
-                sx={{ color: "#ffffff" }}
-              />
-              <FormControlLabel
-                value="neutral"
-                control={<Radio />}
-                label="Neutral"
-                sx={{ color: "#ffffff" }}
-              />
-            </RadioGroup>
-          </FormControl>
-        </Grid>
-        <Grid>
-          <Typography
-            variant="h5"
-            style={{
-              color: "#ffffff",
-              fontFamily: "Poppins",
-              marginLeft: "90px",
-            }}
-          >
-            Confidence Score
-          </Typography>
-          <TextField
-            multiline
-            autoFocus
-            InputProps={{
-              readOnly: true,
-            }}
-            style={{
-              marginTop: "50px",
-              marginLeft: "80px",
-              height: "55px",
-              width: "400px",
-              borderRadius: "10px",
-              backgroundColor: "#ffffff",
-              fontFamily: "Poppins",
-            }}
-            value={confidence} // Display confidence score
-          />
-        </Grid>
-        <Grid style={{display: 'flex', flexDirection: 'row'}}>
-          <TextField
-            placeholder="Enter feedback based on reviewText"
-            multiline
-            autoFocus
-            rows={7}
-            style={{
-              marginTop: "80px",
-              marginLeft: "30px",
-              height: "193px",
-              width: "500px",
-              borderRadius: "10px",
-              backgroundColor: "#ffffff",
-              fontFamily: "Poppins",
-            }}
-            value={feedback}
-            onChange={(e) => setFeedback(e.target.value)} // Update state on change
-          />
-          <Button
-            
-            sx={{
-              color: "#ffffff",
-              backgroundColor: "#4adede",
-              borderRadius: 3,
-              height: "50px",
-              width: "220px",
-              textTransform: "capitalize",
-              fontWeight: "600",
-              fontSize: "18px",
-              marginLeft: "35px",
-              fontFamily: "Poppins",
-              marginTop: '80px',
-              "&:hover": {
-                backgroundColor: "#1aa7ec",
-              },
-            }}
-          >
-            Submit Feedback
-          </Button>
+              <RadioGroup
+                aria-label="intent"
+                name="intent"
+                value={selectedIntent}
+                onChange={handleIntentChange}
+              >
+                {intents.map((intent, index) => (
+                  <FormControlLabel
+                    value={intent.name}
+                    control={<Radio />}
+                    label={`${intent.emoji} ${intent.name}`}
+                    key={index}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+            <Typography style={{ fontFamily: "Poppins" }} gutterBottom>
+              Scale on detected intent
+            </Typography>
+            <Slider
+              value={intentScale}
+              onChange={handleScaleChange}
+              aria-labelledby="intent-scale"
+              valueLabelDisplay="auto"
+              step={10}
+              marks
+              min={0}
+              max={100}
+            />
+          </Paper>
         </Grid>
       </Grid>
     </Container>
@@ -183,6 +258,6 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = {
   submitReview, //This assumes that the action creator is named submitReview
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReviewForm);
