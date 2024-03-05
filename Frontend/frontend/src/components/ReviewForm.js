@@ -18,8 +18,46 @@ import {
 } from "@mui/material/";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt"; // For emotion icons, change as needed
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt"; // For intent icons, change as needed
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
+import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral";
+import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
+import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function ReviewForm({ sentiment, confidence, submitReview }) {
+  // Mock data for the aspect-based classification chart
+  const aspectData = {
+    labels: ["Quality", "Service", "Price", "Ambiance"],
+    datasets: [
+      {
+        label: "Score",
+        data: [8, 5, 4, 6], // Example scores
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
   const sliderValueText = (value) => {
     return `${value}`;
   };
@@ -101,146 +139,214 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
 
   return (
     <Container
-      fullWidth
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        marginTop: "-100px",
-        marginLeft: "-220px",
-      }}
+      maxWidth="xl" 
+      disableGutters
+      style={{ height: "100vh", display: "flex",  }}
     >
-      {/* Text Review Entry */}
-      <Grid item xs={12} style={{ marginBottom: "25px" }}>
-        <Paper style={{ padding: "20px" }}>
-          <Typography variant="h6">Text Review Entry</Typography>
-          <TextField
-            fullWidth
-            label="Enter your review"
-            multiline
-            rows={5}
-            placeholder="I recently visited the new Italian restaurant in town..."
-            variant="outlined"
-            margin="normal"
-          />
-          <Button variant="contained" color="primary">
-            Analyze
-          </Button>
-        </Paper>
-      </Grid>
-      <Grid
-        container
-        style={{ display: "flex", flexDirection: "row" }}
-        spacing={3}
-      >
-        <Grid item xs={12} sm={6}>
-          {" "}
-          {/* Adjust based on your layout needs */}
-          <Paper
-            style={{
-              padding: "20px",
-              height: "350px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
+      <Grid  container spacing={2} style={{ height: '100%' }}>
+        <Grid item xs={6} style={{ display: "flex", flexDirection: "column" }}>
+          <Grid item xs={12} >
+            <Paper style={{ padding: "20px" }}>
+              <Typography style={{ fontFamily: "Poppins" }} variant="h6">
+                Text Review Entry
+              </Typography>
+              <TextField
+                style={{ fontFamily: "Poppins" }}
+                fullWidth
+                label="Enter your review"
+                multiline
+                rows={5}
+                placeholder="I recently visited the new Italian restaurant in town..."
+                variant="outlined"
+                margin="normal"
+              />
+              <Button
+                style={{ fontFamily: "Poppins" }}
+                variant="contained"
+                color="primary"
+              >
+                Analyze
+              </Button>
+            </Paper>
+          </Grid>
+          <Grid
+            container
+            style={{ display: "flex", flexDirection: "row" }}
+            spacing={3}
           >
-            <Typography
-              variant="h6"
-              style={{ marginBottom: "10px", fontFamily: "Poppins" }}
-            >
-              Emotion Detected
+            <Grid item xs={12} sm={6}>
+              {" "}
+              {/* Adjust based on your layout needs */}
+              <Paper
+                style={{
+                  padding: "20px",
+                  height: "350px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  style={{ marginBottom: "10px", fontFamily: "Poppins" }}
+                >
+                  Emotion Detected
+                </Typography>
+                <Box
+                  style={{
+                    overflowY: "auto",
+                    flexGrow: 1,
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "10px",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {emotions.map((emotion, index) => (
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={selectedEmotions[emotion] || false}
+                          onChange={handleEmotionChange}
+                          name={emotion}
+                          size="small" // Smaller checkboxes
+                        />
+                      }
+                      label={
+                        <Typography
+                          variant="caption"
+                          style={{ fontSize: "0.75rem", fontFamily: "Poppins" }}
+                        >
+                          {emotion.charAt(0).toUpperCase() + emotion.slice(1)}
+                        </Typography>
+                      }
+                      key={index}
+                      style={{ width: "auto", flexGrow: 1, maxWidth: "30%" }} // Adjust based on your preference
+                    />
+                  ))}
+                </Box>
+                <TextField
+                  fullWidth
+                  label="Emotion Scores"
+                  multiline
+                  rows={2}
+                  variant="outlined"
+                  margin="dense" // Less space around the TextField
+                  style={{ fontFamily: "Poppins" }}
+                />
+              </Paper>
+            </Grid>
+            {/* Intent Detected */}
+            <Grid item xs={12} sm={6}>
+              <Paper
+                style={{
+                  padding: "20px",
+                  height: "350px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  fontFamily: "Poppins",
+                }}
+              >
+                <Typography style={{ fontFamily: "Poppins" }} variant="h6">
+                  Intent Detected
+                </Typography>
+                <FormControl
+                  component="fieldset"
+                  style={{ overflowY: "auto", flexGrow: 1 }}
+                >
+                  <RadioGroup
+                    aria-label="intent"
+                    name="intent"
+                    value={selectedIntent}
+                    onChange={handleIntentChange}
+                  >
+                    {intents.map((intent, index) => (
+                      <FormControlLabel
+                        value={intent.name}
+                        control={<Radio />}
+                        label={
+                          <Typography
+                            style={{ fontFamily: "Poppins, Arial, sans-serif" }}
+                          >{`${intent.emoji} ${intent.name}`}</Typography>
+                        }
+                        key={index}
+                      />
+                    ))}
+                  </RadioGroup>
+                </FormControl>
+                <Typography style={{ fontFamily: "Poppins" }} gutterBottom>
+                  Scale on detected intent
+                </Typography>
+                <Slider
+                  value={intentScale}
+                  onChange={handleScaleChange}
+                  aria-labelledby="intent-scale"
+                  valueLabelDisplay="auto"
+                  step={10}
+                  marks
+                  min={0}
+                  max={100}
+                />
+              </Paper>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={6} style={{ display: "flex", flexDirection: "column"}}>
+          <Paper style={{ padding: "20px", }}>
+            <Typography variant="h6" style={{ fontFamily: "Poppins" }}>
+              Graded Sentiment Analysis
             </Typography>
             <Box
-              style={{
-                overflowY: "auto",
-                flexGrow: 1,
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "10px",
-                justifyContent: "space-between",
-              }}
+              display="flex"
+              justifyContent="space-around"
+              alignItems="center"
+              my={2}
             >
-              {emotions.map((emotion, index) => (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={selectedEmotions[emotion] || false}
-                      onChange={handleEmotionChange}
-                      name={emotion}
-                      size="small" // Smaller checkboxes
-                    />
-                  }
-                  label={
-                    <Typography
-                      variant="caption"
-                      style={{ fontSize: "0.75rem", fontFamily: "Poppins" }}
-                    >
-                      {emotion.charAt(0).toUpperCase() + emotion.slice(1)}
-                    </Typography>
-                  }
-                  key={index}
-                  style={{ width: "auto", flexGrow: 1, maxWidth: "30%" }} // Adjust based on your preference
-                />
-              ))}
+              <SentimentVeryDissatisfiedIcon />
+              <SentimentDissatisfiedIcon />
+              <SentimentNeutralIcon />
+              <SentimentSatisfiedIcon />
+              <SentimentVerySatisfiedIcon />
             </Box>
-            <TextField
-              fullWidth
-              label="Emotion Scores"
-              multiline
-              rows={2}
-              variant="outlined"
-              margin="dense" // Less space around the TextField
-              style={{ fontFamily: "Poppins" }}
-            />
-          </Paper>
-        </Grid>
-        {/* Intent Detected */}
-        <Grid item xs={12} sm={6}>
-          <Paper
-            style={{
-              padding: "20px",
-              height: "350px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              fontFamily: "Poppins",
-            }}
-          >
-            <Typography style={{ fontFamily: "Poppins" }} variant="h6">
-              Intent Detected
-            </Typography>
-            <FormControl
-              component="fieldset"
-              style={{ overflowY: "auto", flexGrow: 1 }}
-            >
-              <RadioGroup
-                aria-label="intent"
-                name="intent"
-                value={selectedIntent}
-                onChange={handleIntentChange}
-              >
-                {intents.map((intent, index) => (
-                  <FormControlLabel
-                    value={intent.name}
-                    control={<Radio />}
-                    label={`${intent.emoji} ${intent.name}`}
-                    key={index}
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl>
-            <Typography style={{ fontFamily: "Poppins" }} gutterBottom>
-              Scale on detected intent
-            </Typography>
             <Slider
-              value={intentScale}
-              onChange={handleScaleChange}
-              aria-labelledby="intent-scale"
+              defaultValue={50}
+              aria-labelledby="discrete-slider"
               valueLabelDisplay="auto"
               step={10}
               marks
               min={0}
               max={100}
+            />
+          </Paper>
+          <Paper style={{ padding: "20px", marginBottom: "25px" }}>
+            <Typography variant="h6" style={{ fontFamily: "Poppins" }}>
+              Aspect-Based Classification
+            </Typography>
+            <Box display="flex" justifyContent="space-between" my={2}>
+              <TextField
+                disabled
+                label="Overall Sentiment Score"
+                defaultValue="Positive"
+                variant="outlined"
+              />
+              <Box height="200px" width="100%" mt={2}>
+                <Bar data={aspectData} />
+              </Box>
+            </Box>
+          </Paper>
+          <Paper style={{ padding: "20px" }}>
+            <Typography variant="h6" style={{ fontFamily: "Poppins" }}>
+              Feedback...
+            </Typography>
+            <TextField
+              fullWidth
+              multiline
+              rows={4}
+              placeholder="Enter Feedback based on the results"
+              variant="outlined"
+              margin="normal"
+              style={{ fontFamily: "Poppins" }}
             />
           </Paper>
         </Grid>
