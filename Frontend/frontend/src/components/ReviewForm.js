@@ -151,8 +151,22 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
       <Grid container spacing={2} style={{ height: "100%" }}>
         <Grid item xs={6} style={{ display: "flex", flexDirection: "column" }}>
           <Grid item xs={12}>
-            <Paper style={{ padding: "20px" }}>
-              <Typography style={{ fontFamily: "Poppins" }} variant="h6">
+            <Paper
+              style={{
+                padding: "20px",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Typography
+                style={{
+                  fontFamily: "Poppins",
+                  fontWeight: "600",
+                  color: "#333",
+                  marginBottom: "20px",
+                }}
+                variant="h6"
+              >
                 Text Review Entry
               </Typography>
               <TextField
@@ -164,14 +178,27 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                 placeholder="I recently visited the new Italian restaurant in town..."
                 variant="outlined"
                 margin="normal"
+                required
+                error={reviewText.length < 25} 
+                helperText={
+                  reviewText.length < 25
+                    ? "Review must be at least 25 characters"
+                    : " "
+                } 
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
               />
-              <Button
-                style={{ fontFamily: "Poppins" }}
-                variant="contained"
-                color="primary"
-              >
-                Analyze
-              </Button>
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <Button
+                  style={{ fontFamily: "Poppins" }}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleReviewSubmit}
+                  disabled={reviewText.length < 10} 
+                >
+                  Analyze
+                </Button>
+              </div>
             </Paper>
           </Grid>
           <Grid
@@ -180,8 +207,6 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
             spacing={3}
           >
             <Grid item xs={12} sm={6}>
-              {" "}
-              {/* Adjust based on your layout needs */}
               <Paper
                 style={{
                   padding: "20px",
@@ -189,77 +214,78 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
+                  background: "#f5f5f5",
+                  borderRadius: "15px",
+                  boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
                 }}
               >
                 <Typography
                   variant="h6"
-                  style={{ marginBottom: "10px", fontFamily: "Poppins" }}
+                  style={{
+                    marginBottom: "20px",
+                    fontFamily: "Poppins",
+                    color: "#333",
+                    fontWeight: "600",
+                  }}
                 >
                   Aspect-Based Classification
                 </Typography>
-                {/* <Box
+                <Box
                   style={{
-                    overflowY: "auto",
-                    flexGrow: 1,
                     display: "flex",
-                    flexWrap: "wrap",
-                    gap: "10px",
-                    justifyContent: "space-between",
+                    flexDirection: "column",
+                    justifyContent: "space-around", // Evenly space out the text fields
+                    height: "80%", // Use most of the Paper's height
                   }}
                 >
-                  {emotions.map((emotion, index) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={selectedEmotions[emotion] || false}
-                          onChange={handleEmotionChange}
-                          name={emotion}
-                          size="small" // Smaller checkboxes
-                        />
-                      }
-                      label={
-                        <Typography
-                          variant="caption"
-                          style={{ fontSize: "0.75rem", fontFamily: "Poppins" }}
-                        >
-                          {emotion.charAt(0).toUpperCase() + emotion.slice(1)}
-                        </Typography>
-                      }
-                      key={index}
-                      style={{ width: "auto", flexGrow: 1, maxWidth: "30%" }} // Adjust based on your preference
-                    />
-                  ))}
-                </Box> */}
-                {/* <TextField
-                  fullWidth
-                  label="Emotion Scores"
-                  multiline
-                  rows={2}
-                  variant="outlined"
-                  margin="dense" // Less space around the TextField
-                  style={{ fontFamily: "Poppins" }}
-                /> */}
-                <TextField
-                  disabled
-                  label="Overall Aspect Score"
-                  defaultValue="47.5"
-                  variant="outlined"
-                />
-                <TextField
-                  disabled
-                  label="Aspect Keywords in Review"
-                  defaultValue="Help Wow Product"
-                  variant="outlined"
-                />
-                <TextField
-                  disabled
-                  label="Review Helpfulness (Count)"
-                  defaultValue="5"
-                  variant="outlined"
-                />
+                  <TextField
+                    disabled
+                    label="Overall Aspect Score"
+                    defaultValue="47.5"
+                    variant="outlined"
+                    InputProps={{
+                      readOnly: true,
+                      style: {
+                        backgroundColor: "white",
+                        borderRadius: "10px",
+                      },
+                    }}
+                    style={{
+                      marginBottom: "10px",
+                    }}
+                  />
+                  <TextField
+                    disabled
+                    label="Aspect Keywords in Review"
+                    defaultValue="Help, Wow, Product"
+                    variant="outlined"
+                    InputProps={{
+                      readOnly: true,
+                      style: {
+                        backgroundColor: "white",
+                        borderRadius: "10px",
+                      },
+                    }}
+                    style={{
+                      marginBottom: "10px",
+                    }}
+                  />
+                  <TextField
+                    disabled
+                    label="Review Helpfulness (Count)"
+                    defaultValue="5"
+                    variant="outlined"
+                    InputProps={{
+                      readOnly: true,
+                      style: {
+                        backgroundColor: "white",
+                        borderRadius: "10px",
+                      },
+                    }}
+                  />
+                </Box>
               </Paper>
             </Grid>
-            {/* Intent Detected */}
             <Grid item xs={12} sm={6}>
               <Paper
                 style={{
@@ -271,7 +297,14 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                   fontFamily: "Poppins",
                 }}
               >
-                <Typography style={{ fontFamily: "Poppins" }} variant="h6">
+                <Typography
+                  style={{
+                    fontFamily: "Poppins",
+                    fontWeight: "600",
+                    color: "#333",
+                  }}
+                  variant="h6"
+                >
                   Intent Detected
                 </Typography>
                 <FormControl
@@ -290,7 +323,7 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                         control={<Radio />}
                         label={
                           <Typography
-                            style={{ fontFamily: "Poppins, Arial, sans-serif" }}
+                            style={{ fontFamily: "Poppins", fontSize: "15px" }}
                           >{`${intent.emoji} ${intent.name}`}</Typography>
                         }
                         key={index}
@@ -317,7 +350,14 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
         </Grid>
         <Grid item xs={6} style={{ display: "flex", flexDirection: "column" }}>
           <Paper style={{ padding: "20px" }}>
-            <Typography variant="h6" style={{ fontFamily: "Poppins" }}>
+            <Typography
+              variant="h6"
+              style={{
+                fontFamily: "Poppins",
+                fontWeight: "600",
+                color: "#333",
+              }}
+            >
               Graded Sentiment Analysis
             </Typography>
             <Box
@@ -349,64 +389,88 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
               marginTop: "25px",
               display: "flex",
               maxHeight: "250px",
-              justifyContent: "space-between",
             }}
           >
-            <Typography
-              variant="h6"
-              style={{ fontFamily: "Poppins", width: "100%" }}
-            >
-              Emotion Detected
-            </Typography>
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="start"
-              width="100%"
-            >
-              <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-between"
-                style={{
-                  marginTop: "35px",
-                  marginRight: '20px',
-                  maxHeight: "200px", 
-                  overflowY: "auto", 
-                }}
-              >
-                {emotions.map((emotion, index) => (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={selectedEmotions[emotion] || false}
-                        onChange={handleEmotionChange}
-                        name={emotion}
-                        size="small"
-                      />
-                    }
-                    label={
-                      <Typography
-                        variant="caption"
-                        style={{ fontSize: "0.75rem", fontFamily: "Poppins" }}
-                      >
-                        {emotion.charAt(0).toUpperCase() + emotion.slice(1)}
-                      </Typography>
-                    }
-                    key={index}
+            <Grid container spacing={2}>
+              {" "}
+              {/* Adjust spacing as needed */}
+              <Grid item xs={12}>
+                <Typography
+                  variant="h6"
+                  style={{
+                    marginBottom: "20px",
+                    fontFamily: "Poppins",
+                    fontWeight: "600",
+                    color: "#333",
+                  }}
+                >
+                  Emotion Detected
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                {" "}
+                {/* Adjust grid sizing as needed for emotion labels */}
+                <Box
+                  display="flex"
+                  flexWrap="wrap" // Allows items to wrap and fill the horizontal space
+                  style={{
+                    maxHeight: "190px",
+                    overflowY: "auto",
+                    paddingRight: "20px", // Maintains spacing between this box and the chart
+                  }}
+                >
+                  {emotions.map((emotion, index) => (
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={selectedEmotions[emotion] || false}
+                          onChange={handleEmotionChange}
+                          name={emotion}
+                          size="small"
+                        />
+                      }
+                      label={
+                        <Typography
+                          variant="caption"
+                          style={{ fontSize: "0.75rem", fontFamily: "Poppins" }}
+                        >
+                          {emotion.charAt(0).toUpperCase() + emotion.slice(1)}
+                        </Typography>
+                      }
+                      key={index}
+                      style={{ marginRight: "10px", marginBottom: "10px" }} // Add spacing between labels
+                    />
+                  ))}
+                </Box>
+              </Grid>
+              <Grid item xs={6}>
+                {" "}
+                {/* Adjust grid sizing as needed for the bar chart */}
+                <Box
+                  style={{
+                    height: "190px", // Ensure it's the same as your labels box for alignment
+                    width: "100%", // Ensures the chart uses the full width of its grid item
+                  }}
+                >
+                  <Bar
+                    data={aspectData}
+                    options={{
+                      maintainAspectRatio: false, // Ensures the chart fills the container
+                    }}
                   />
-                ))}
-              </Box>
-              <Bar
-                style={{ paddingTop: "30px", paddingRight: "20px" }}
-                data={aspectData}
-                options={{ maintainAspectRatio: true }}
-              />
-              {/* </Box> */}
-            </Box>
+                </Box>
+              </Grid>
+            </Grid>
           </Paper>
           <Paper style={{ padding: "20px" }}>
-            <Typography variant="h6" style={{ fontFamily: "Poppins" }}>
+            <Typography
+              variant="h6"
+              style={{
+                fontFamily: "Poppins",
+                fontWeight: "600",
+                color: "#333",
+              }}
+            >
               Feedback...
             </Typography>
             <TextField
@@ -433,7 +497,7 @@ const mapStateToProps = (state) => {
   };
 };
 const mapDispatchToProps = {
-  submitReview, //This assumes that the action creator is named submitReview
+  submitReview, 
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReviewForm);
