@@ -139,13 +139,18 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
 
   return (
     <Container
-      maxWidth="xl" 
+      maxWidth="false"
       disableGutters
-      style={{ height: "100vh", display: "flex",  }}
+      style={{
+        marginTop: "-100px",
+        display: "flex",
+        marginLeft: "20px",
+        marginRight: "20px",
+      }}
     >
-      <Grid  container spacing={2} style={{ height: '100%' }}>
+      <Grid container spacing={2} style={{ height: "100%" }}>
         <Grid item xs={6} style={{ display: "flex", flexDirection: "column" }}>
-          <Grid item xs={12} >
+          <Grid item xs={12}>
             <Paper style={{ padding: "20px" }}>
               <Typography style={{ fontFamily: "Poppins" }} variant="h6">
                 Text Review Entry
@@ -190,9 +195,9 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                   variant="h6"
                   style={{ marginBottom: "10px", fontFamily: "Poppins" }}
                 >
-                  Emotion Detected
+                  Aspect-Based Classification
                 </Typography>
-                <Box
+                {/* <Box
                   style={{
                     overflowY: "auto",
                     flexGrow: 1,
@@ -224,8 +229,8 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                       style={{ width: "auto", flexGrow: 1, maxWidth: "30%" }} // Adjust based on your preference
                     />
                   ))}
-                </Box>
-                <TextField
+                </Box> */}
+                {/* <TextField
                   fullWidth
                   label="Emotion Scores"
                   multiline
@@ -233,6 +238,24 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                   variant="outlined"
                   margin="dense" // Less space around the TextField
                   style={{ fontFamily: "Poppins" }}
+                /> */}
+                <TextField
+                  disabled
+                  label="Overall Aspect Score"
+                  defaultValue="47.5"
+                  variant="outlined"
+                />
+                <TextField
+                  disabled
+                  label="Aspect Keywords in Review"
+                  defaultValue="Help Wow Product"
+                  variant="outlined"
+                />
+                <TextField
+                  disabled
+                  label="Review Helpfulness (Count)"
+                  defaultValue="5"
+                  variant="outlined"
                 />
               </Paper>
             </Grid>
@@ -292,8 +315,8 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={6} style={{ display: "flex", flexDirection: "column"}}>
-          <Paper style={{ padding: "20px", }}>
+        <Grid item xs={6} style={{ display: "flex", flexDirection: "column" }}>
+          <Paper style={{ padding: "20px" }}>
             <Typography variant="h6" style={{ fontFamily: "Poppins" }}>
               Graded Sentiment Analysis
             </Typography>
@@ -319,20 +342,67 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
               max={100}
             />
           </Paper>
-          <Paper style={{ padding: "20px", marginBottom: "25px" }}>
-            <Typography variant="h6" style={{ fontFamily: "Poppins" }}>
-              Aspect-Based Classification
+          <Paper
+            style={{
+              padding: "20px",
+              marginBottom: "25px",
+              marginTop: "25px",
+              display: "flex",
+              maxHeight: "250px",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography
+              variant="h6"
+              style={{ fontFamily: "Poppins", width: "100%" }}
+            >
+              Emotion Detected
             </Typography>
-            <Box display="flex" justifyContent="space-between" my={2}>
-              <TextField
-                disabled
-                label="Overall Sentiment Score"
-                defaultValue="Positive"
-                variant="outlined"
-              />
-              <Box height="200px" width="100%" mt={2}>
-                <Bar data={aspectData} />
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="start"
+              width="100%"
+            >
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+                style={{
+                  marginTop: "35px",
+                  marginRight: '20px',
+                  maxHeight: "200px", 
+                  overflowY: "auto", 
+                }}
+              >
+                {emotions.map((emotion, index) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={selectedEmotions[emotion] || false}
+                        onChange={handleEmotionChange}
+                        name={emotion}
+                        size="small"
+                      />
+                    }
+                    label={
+                      <Typography
+                        variant="caption"
+                        style={{ fontSize: "0.75rem", fontFamily: "Poppins" }}
+                      >
+                        {emotion.charAt(0).toUpperCase() + emotion.slice(1)}
+                      </Typography>
+                    }
+                    key={index}
+                  />
+                ))}
               </Box>
+              <Bar
+                style={{ paddingTop: "30px", paddingRight: "20px" }}
+                data={aspectData}
+                options={{ maintainAspectRatio: true }}
+              />
+              {/* </Box> */}
             </Box>
           </Paper>
           <Paper style={{ padding: "20px" }}>
