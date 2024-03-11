@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Register route
 router.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     try {
         let user = await User.findOne({ email });
@@ -16,13 +16,11 @@ router.post('/register', async (req, res) => {
         }
 
         user = new User({
-            username,
+            firstName, // Changed from username
+            lastName,  // Added lastName
             email,
-            password // Note: It's actually safer to hash the password before setting it here
+            password
         });
-
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
 
         await user.save();
 
@@ -32,12 +30,15 @@ router.post('/register', async (req, res) => {
             }
         };
 
-        jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: '1h' // Corrected from 3600 to '1h' for clarity
-        }, (err, token) => {
-            if (err) throw err;
-            res.json({ token });
-        });
+        jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' },
+            (err, token) => {
+                if (err) throw err;
+                res.json({ token });
+            }
+        );
 
     } catch (err) {
         console.error(err.message);
