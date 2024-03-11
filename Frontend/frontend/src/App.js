@@ -4,18 +4,20 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import LoginPage from "./pages/loginPage";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
+        {/* <Navbar /> */}
         <div className="pages">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginPage/>} />
           </Routes>
         </div>
-        <Footer/>
+        {/* <Footer/> */}
       </BrowserRouter>
     </div>
   );

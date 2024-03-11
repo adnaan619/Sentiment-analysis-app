@@ -46,11 +46,11 @@ ChartJS.register(
 function ReviewForm({ sentiment, confidence, submitReview }) {
   // Mock data for the aspect-based classification chart
   const aspectData = {
-    labels: ["Quality", "Service", "Price", "Ambiance"],
+    labels: ["Quality", "Service", "Price", "Ambiance", "lol"],
     datasets: [
       {
         label: "Score",
-        data: [8, 5, 4, 6], // Example scores
+        data: [10, 8, 5, 4, 6], // Example scores
         backgroundColor: "rgba(75, 192, 192, 0.2)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
@@ -142,59 +142,59 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
       maxWidth="false"
       disableGutters
       style={{
-        marginTop: "-100px",
+        marginTop: "-110px",
         display: "flex",
         marginLeft: "20px",
         marginRight: "20px",
       }}
     >
-      <Grid container spacing={2} style={{ height: "100%" }}>
-        <Grid item xs={6} style={{ display: "flex", flexDirection: "column" }}>
-          <Grid item xs={12}>
+      <Grid container spacing={2} >
+        <Grid item xs={6} style={{ display: "flex", flexDirection: "column", }}>
+          <Grid item xs={12} sm={12}>
             <Paper
+              elevation={3} // Add shadow for aesthetic design
               style={{
-                padding: "20px",
+                padding: "15px",
                 display: "flex",
                 flexDirection: "column",
+                justifyContent: "space-between", // Space out the internal elements
+                minHeight: '230px', // Set a minimum height for aesthetics
+                backgroundColor: '#fafafa', // Light background for the paper
+                borderRadius: "8px", // Rounded corners for the paper
               }}
             >
               <Typography
+                variant="h6"
                 style={{
+                  marginBottom: "15px", // Reduce margin bottom
                   fontFamily: "Poppins",
                   fontWeight: "600",
                   color: "#333",
-                  marginBottom: "20px",
                 }}
-                variant="h6"
               >
                 Text Review Entry
               </Typography>
               <TextField
-                style={{ fontFamily: "Poppins" }}
+                style={{ fontFamily: "Poppins", marginBottom: "15px" }} // Reduce margin bottom for the text field
                 fullWidth
                 label="Enter your review"
                 multiline
-                rows={5}
+                rows={4} // Reduce number of rows to decrease height
                 placeholder="I recently visited the new Italian restaurant in town..."
                 variant="outlined"
-                margin="normal"
                 required
-                error={reviewText.length < 25} 
-                helperText={
-                  reviewText.length < 25
-                    ? "Review must be at least 25 characters"
-                    : " "
-                } 
+                error={reviewText.length < 25}
+                helperText={reviewText.length < 25 ? "Review must be at least 25 characters" : " "}
                 value={reviewText}
                 onChange={(e) => setReviewText(e.target.value)}
               />
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <Button
-                  style={{ fontFamily: "Poppins" }}
+                  style={{ fontFamily: "Poppins", textTransform: 'none', marginTop: '-15px' }} // Prevent uppercase text for consistency
                   variant="contained"
                   color="primary"
                   onClick={handleReviewSubmit}
-                  disabled={reviewText.length < 10} 
+                  disabled={reviewText.length < 25} // Ensure correct minimum length check
                 >
                   Analyze
                 </Button>
@@ -206,28 +206,19 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
             style={{ display: "flex", flexDirection: "row" }}
             spacing={3}
           >
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6}  >
               <Paper
                 style={{
                   padding: "20px",
-                  height: "350px",
+                  height: "240px",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  background: "#f5f5f5",
                   borderRadius: "15px",
-                  boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
+                  // boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
                 }}
               >
-                <Typography
-                  variant="h6"
-                  style={{
-                    marginBottom: "20px",
-                    fontFamily: "Poppins",
-                    color: "#333",
-                    fontWeight: "600",
-                  }}
-                >
+                <Typography variant="h6" style={{ marginBottom: "20px", fontFamily: "Poppins", fontWeight: "600", color: "#333" }}>
                   Aspect-Based Classification
                 </Typography>
                 <Box
@@ -235,7 +226,7 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-around", // Evenly space out the text fields
-                    height: "80%", // Use most of the Paper's height
+                    // height: "80%", // Use most of the Paper's height
                   }}
                 >
                   <TextField
@@ -259,6 +250,8 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                     label="Aspect Keywords in Review"
                     defaultValue="Help, Wow, Product"
                     variant="outlined"
+                    // multiline
+                    // rows={2}
                     InputProps={{
                       readOnly: true,
                       style: {
@@ -286,11 +279,11 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                 </Box>
               </Paper>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6} >
               <Paper
                 style={{
                   padding: "20px",
-                  height: "350px",
+                  height: "240px",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
@@ -331,7 +324,7 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                     ))}
                   </RadioGroup>
                 </FormControl>
-                <Typography style={{ fontFamily: "Poppins" }} gutterBottom>
+                {/* <Typography style={{ fontFamily: "Poppins" }} gutterBottom>
                   Scale on detected intent
                 </Typography>
                 <Slider
@@ -343,13 +336,13 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                   marks
                   min={0}
                   max={100}
-                />
+                /> */}
               </Paper>
             </Grid>
           </Grid>
         </Grid>
         <Grid item xs={6} style={{ display: "flex", flexDirection: "column" }}>
-          <Paper style={{ padding: "20px" }}>
+          <Paper style={{ padding: "10px", height: '110px' }}>
             <Typography
               variant="h6"
               style={{
@@ -385,10 +378,10 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
           <Paper
             style={{
               padding: "20px",
-              marginBottom: "25px",
-              marginTop: "25px",
+              marginBottom: "10px",
+              marginTop: "10px",
               display: "flex",
-              maxHeight: "250px",
+              // maxHeight: "250px",
             }}
           >
             <Grid container spacing={2}>
@@ -398,7 +391,6 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                 <Typography
                   variant="h6"
                   style={{
-                    marginBottom: "20px",
                     fontFamily: "Poppins",
                     fontWeight: "600",
                     color: "#333",
@@ -408,13 +400,11 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                {" "}
-                {/* Adjust grid sizing as needed for emotion labels */}
                 <Box
                   display="flex"
                   flexWrap="wrap" // Allows items to wrap and fill the horizontal space
                   style={{
-                    maxHeight: "190px",
+                    maxHeight: "150px",
                     overflowY: "auto",
                     paddingRight: "20px", // Maintains spacing between this box and the chart
                   }}
@@ -448,7 +438,7 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                 {/* Adjust grid sizing as needed for the bar chart */}
                 <Box
                   style={{
-                    height: "190px", // Ensure it's the same as your labels box for alignment
+                    // height: "190px", // Ensure it's the same as your labels box for alignment
                     width: "100%", // Ensures the chart uses the full width of its grid item
                   }}
                 >
@@ -462,7 +452,7 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
               </Grid>
             </Grid>
           </Paper>
-          <Paper style={{ padding: "20px" }}>
+          <Paper style={{ padding: "10px", height: '160px' }}>
             <Typography
               variant="h6"
               style={{
@@ -473,16 +463,29 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
             >
               Feedback...
             </Typography>
-            <TextField
-              fullWidth
-              multiline
-              rows={4}
-              placeholder="Enter Feedback based on the results"
-              variant="outlined"
-              margin="normal"
-              style={{ fontFamily: "Poppins" }}
-            />
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <TextField
+                fullWidth
+                multiline
+                rows={2}
+                placeholder="Enter Feedback based on the results"
+                variant="outlined"
+                style={{ fontFamily: "Poppins", marginBottom: '10px' }} // Add margin bottom to separate from button
+              />
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}> {/* This div will align the button to the right */}
+                <Button
+                  style={{ fontFamily: "Poppins", textTransform: 'none' }} // Prevent uppercase text for consistency
+                  variant="contained"
+                  color="primary"
+                  onClick={handleReviewSubmit}
+                  disabled={reviewText.length < 25} // Ensure correct minimum length check
+                >
+                  Submit
+                </Button>
+              </div>
+            </div>
           </Paper>
+
         </Grid>
       </Grid>
     </Container>
@@ -497,7 +500,7 @@ const mapStateToProps = (state) => {
   };
 };
 const mapDispatchToProps = {
-  submitReview, 
+  submitReview,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReviewForm);

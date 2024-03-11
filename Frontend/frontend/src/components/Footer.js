@@ -11,7 +11,7 @@ function Footer() {
           style={{
             display: "flex",
             backgroundColor: "#4361ee",
-            height: "80px",
+            height: "50px",
             justifyContent: "center",
             flexWrap: "nowrap",
             alignItems: "center",
