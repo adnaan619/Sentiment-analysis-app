@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import LoginPage from "./pages/loginPage";
+import SignUpPage from "./pages/signupPage";
+import TermsAndConditions from "./pages/terms&conditions";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage/>} />
+            <Route path="/sign-up" element={<SignUpPage/>} />
+            <Route path="/terms&conditions" element={<TermsAndConditions/>}/>
           </Routes>
         </div>
         {/* <Footer/> */}

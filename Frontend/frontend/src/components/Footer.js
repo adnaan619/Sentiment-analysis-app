@@ -1,6 +1,7 @@
 import React from "react";
 import { Fragment } from "react";
-import { Container, Grid, Typography } from "@mui/material/";
+import { Container, Grid, Typography, Box } from "@mui/material/";
+import  Logo  from '../images/logo.webp'; 
 
 function Footer() {
   return (
@@ -8,30 +9,34 @@ function Footer() {
       <Container maxWidth={false} disableGutters>
         <Grid
           container
-          style={{
-            display: "flex",
+          sx={{
             backgroundColor: "#4361ee",
             height: "50px",
             justifyContent: "center",
-            flexWrap: "nowrap",
             alignItems: "center",
-            alignContent: "center",
             position: "fixed",
             bottom: 0,
+            padding: '0 20px',
           }}
         >
-          <Grid
-            style={{
-              display: "flex",
-              justifyContent: "center",
-            }}
+          <Grid item 
+            xs={12}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
           >
+            {/* Optional Logo */}
+            <Box marginRight={1} display="flex" alignItems="center">
+              <img src={Logo} style={{ fill: '#ffffff', marginRight: 8 }} width="24" height="24" />
+            </Box>
+
             <Typography
-              style={{
+              variant="body2" 
+              sx={{
                 fontFamily: "Poppins",
                 color: "#ffffff",
-                fontSize: "18px",
                 fontWeight: 400,
+                textAlign: 'center'
               }}
             >
               Sentiment X by Adnaan Fuard | 2024 ©

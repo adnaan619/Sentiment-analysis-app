@@ -477,8 +477,7 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                   style={{ fontFamily: "Poppins", textTransform: 'none' }} // Prevent uppercase text for consistency
                   variant="contained"
                   color="primary"
-                  onClick={handleReviewSubmit}
-                  disabled={reviewText.length < 25} // Ensure correct minimum length check
+                  
                 >
                   Submit
                 </Button>
