@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { submitReview } from "../redux/actions/submitReviewAction";
 import {
   Grid,
   Container,
@@ -43,7 +42,7 @@ ChartJS.register(
   Legend
 );
 
-function ReviewForm({ sentiment, confidence, submitReview }) {
+function ReviewForm() {
   // Mock data for the aspect-based classification chart
   const aspectData = {
     labels: ["Quality", "Service", "Price", "Ambiance", "lol"],
@@ -66,10 +65,7 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
   const [reviewText, setReviewText] = useState("");
   const [feedback, setFeedback] = useState("");
 
-  //Function to handle reviewText submission
-  const handleReviewSubmit = () => {
-    submitReview(reviewText); //Dispatch the action to submit the review
-  };
+  
 
   // State for selected emotions and their scores
   const [selectedEmotions, setSelectedEmotions] = useState({});
@@ -193,7 +189,7 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
                   style={{ fontFamily: "Poppins", textTransform: 'none', marginTop: '-15px' }} // Prevent uppercase text for consistency
                   variant="contained"
                   color="primary"
-                  onClick={handleReviewSubmit}
+                  
                   disabled={reviewText.length < 25} // Ensure correct minimum length check
                 >
                   Analyze
@@ -491,15 +487,5 @@ function ReviewForm({ sentiment, confidence, submitReview }) {
   );
 }
 
-const mapStateToProps = (state) => {
-  console.log("Redux state:", state); // Log the Redux state to see its structure
-  return {
-    sentiment: state.sentimentReducer?.sentiment,
-    confidence: state.sentimentReducer?.confidence,
-  };
-};
-const mapDispatchToProps = {
-  submitReview,
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewForm);
+export default ReviewForm;

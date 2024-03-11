@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { Provider } from "react-redux";
+import store from "./redux/store";
 // pages & components
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
@@ -10,6 +11,7 @@ import TermsAndConditions from "./pages/terms&conditions";
 
 function App() {
   return (
+    <Provider store={store}>
     <div className="App">
       <BrowserRouter>
         {/* <Navbar /> */}
@@ -24,6 +26,7 @@ function App() {
         {/* <Footer/> */}
       </BrowserRouter>
     </div>
+    </Provider>
   );
 }
 
